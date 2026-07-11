@@ -1,0 +1,12 @@
+[submodule "ai service 2"]
+	path = ai service 2
+	url = https://github.com/aadij1905/ai-service.git
+[submodule "analytic service"]
+	path = analytic service
+	url = https://github.com/aadij1905/analytics-service.git
+[submodule "review-hub"]
+	path = review-hub
+	url = https://github.com/aadij1905/review_hub.git
+[submodule "shopify-pp"]
+	path = shopify-pp
+	url = https://github.com/aadij1905/shopify-extractor.git
