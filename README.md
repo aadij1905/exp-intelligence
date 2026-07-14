@@ -67,3 +67,6 @@ configured in [`review-hub/src/lib/config.js`](review-hub/src/lib/config.js).
 ## Per-service docs
 
 - [`review-hub/README.md`](review-hub/README.md) — dashboard flow, personas, endpoint config
+- [`TUNNELS.md`](TUNNELS.md) — running `ai service 2` / `analytic service` locally
+  and exposing them via Cloudflare quick tunnels, to dodge Railway free-tier
+  rate limits without deploying
