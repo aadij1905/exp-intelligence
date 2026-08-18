@@ -1,0 +1,987 @@
+\documentclass[11pt,a4paper]{article}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  Exp Intelligence — Technical & Strategic Report
+% ─────────────────────────────────────────────────────────────────────────────
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+\usepackage{hyperref}
+
+% ── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{brandblue}{HTML}{1F4E79}
+\definecolor{brandteal}{HTML}{2E8B8B}
+\definecolor{lightgray}{HTML}{F4F6F8}
+\definecolor{codebg}{HTML}{F7F7F9}
+\definecolor{rulegray}{HTML}{C9D2DA}
+\definecolor{accent}{HTML}{C0563B}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=brandblue,
+  urlcolor=brandteal,
+  citecolor=brandblue,
+  pdftitle={Exp Intelligence — Technical and Strategic Report},
+  pdfauthor={Aadi Jain}
+}
+
+% ── Section styling ──────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{brandblue}}
+  {\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{brandteal}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{black}}
+  {\thesubsubsection}{0.6em}{}
+
+% ── Headers / footers ────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\small\color{brandblue}Exp Intelligence}
+\fancyhead[R]{\small\color{brandblue}Technical \& Strategic Report}
+\fancyfoot[C]{\thepage}
+
+% ── Code listing style ───────────────────────────────────────────────────────
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{rulegray},
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  keywordstyle=\color{brandblue}\bfseries,
+  commentstyle=\color{brandteal}\itshape,
+  stringstyle=\color{accent},
+  numbers=none,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+  columns=fullflexible,
+}
+
+% ── Callout box ──────────────────────────────────────────────────────────────
+\newtcolorbox{keybox}[1]{
+  colback=lightgray,
+  colframe=brandteal,
+  boxrule=0.6pt,
+  arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,
+  title=#1,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  colbacktitle=brandteal
+}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── Title page ───────────────────────────────────────────────────────────────
+\begin{titlepage}
+\centering
+\vspace*{1.4cm}
+{\large\color{brandblue}\bfseries GlobalLogic \textnormal{(A Hitachi Group Company)}}\\[0.15cm]
+{\small\color{brandteal} BSC-NGT Portfolio --- GenAI Consultancy}\\[0.8cm]
+{\color{brandblue}\rule{\textwidth}{2pt}}\\[0.6cm]
+{\Huge\bfseries\color{brandblue} Exp Intelligence}\\[0.4cm]
+{\LARGE AI-Assisted Storefront Optimization Pipeline}\\[0.3cm]
+{\large\itshape Technical Architecture, Rationale \& Strategic Roadmap}\\[0.4cm]
+{\color{brandblue}\rule{\textwidth}{2pt}}\\[0.8cm]
+{\large\bfseries by Aadi Jain}\\[1.0cm]
+
+\begin{minipage}{0.85\textwidth}
+\centering\itshape\large
+``Turn raw storefront analytics into ranked, data-grounded improvement
+suggestions --- each with a ready-to-paste code patch --- reviewed by a
+product owner and picked up by developers.''
+\end{minipage}
+
+\vfill
+
+\begin{tabular}{rl}
+\textbf{Author:} & Aadi Jain --- Backend \& Backlog\\
+\textbf{Programme:} & GenAI Consultancy Internship, BSC-NGT\\
+\textbf{Document type:} & Technical \& strategic report\\
+\textbf{Scope:} & Context, Why, How, PM \& delivery, Improvements, Future, Deployment\\
+\textbf{Services covered:} & Shopify Extractor, Analytics, AI, Review Hub\\
+\textbf{Date:} & July 2026\\
+\end{tabular}
+
+\vspace{1cm}
+{\color{rulegray}\rule{\textwidth}{0.5pt}}
+\end{titlepage}
+
+% ── TOC ──────────────────────────────────────────────────────────────────────
+\tableofcontents
+\thispagestyle{fancy}
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Executive Summary}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\textbf{Exp Intelligence} is a microservice pipeline that closes the loop
+between \emph{observing} how a Shopify storefront performs and \emph{acting}
+on it. It automatically pulls a store's own analytics, detects statistically
+significant problems, uses large language models (LLMs) to translate those
+problems into prioritized, plain-English improvement suggestions --- each
+carrying a concrete code patch --- and presents them in a review dashboard
+where a Product Owner (PO) approves or rejects them and developers pick up the
+approved ones.
+
+The system is composed of four independently deployable services:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l l c Y@{}}
+\toprule
+\textbf{Service} & \textbf{Folder} & \textbf{Port} & \textbf{Responsibility}\\
+\midrule
+Shopify Extractor & \texttt{shopify-pp} & 3000 & OAuth install on a store; extract ShopifyQL metrics + real theme code; forward to Analytics\\
+Analytics Service & \texttt{analytic service} & 4000 & Normalize \& ingest data; run a Playwright crawler; detect problems statistically\\
+AI Service & \texttt{ai service} & 5001 & Turn analytics + screenshots into ranked suggestions and code patches via LLMs\\
+Review Hub & \texttt{review-hub} & 5173 & React dashboard: PO approve/reject, developer code view\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Data flows strictly in one direction:
+\[
+\texttt{shopify-pp}\;\rightarrow\;\texttt{analytic service}\;\rightarrow\;\texttt{ai service}\;\rightarrow\;\texttt{review-hub}
+\]
+
+\begin{keybox}{The core value proposition}
+Store owners drown in dashboards but starve for decisions. Exp Intelligence
+does not add another dashboard --- it produces \emph{ranked, data-grounded
+actions with the code to implement them}, gated by a human review step so that
+nothing ships without a person approving it.
+\end{keybox}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Project Context \& Organization}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Exp Intelligence (also referred to as the \emph{Experience Intelligence /
+Analytics-to-UX Recommendation Engine}) was built during a GenAI Consultancy
+internship engagement within GlobalLogic's \textbf{BSC-NGT} (Business Services
+\& Consulting --- Next Generation Technologies) portfolio. It targets D2C
+(direct-to-consumer) Shopify merchants in the fashion, beauty, and lifestyle
+segment.
+
+\subsection{Team \& stakeholders}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Name} & \textbf{Role} & \textbf{Relevance to the project}\\
+\midrule
+Ambuj Prakash & Project Mentor \& Lead & Reviews deliverables, overall engagement ownership\\
+Nikhil Gupta & Technical Mentor & Technical architecture \& implementation guidance\\
+Shubham Tomar & Mentor & Onboarding, guidance, reviews\\
+Akanksha Rajwanshi & Mentor & Onboarding, guidance, reviews\\
+Samad Khan & Team / BSC-NGT & BSC-NGT Portfolio team\\
+Mansimar & Peer --- Backend \& Backlog & Co-owned backend (Analytics + AI services) \& backlog\\
+\textbf{Aadi Jain} & Peer --- Backend \& Backlog & Co-owned backend (Analytics + AI services) \& backlog\\
+Pranjal Tanwar & Peer --- Frontend \& Backlog & Co-owned frontend (Admin Portal / Review Hub) \& backlog\\
+Rishabh Varshney & Peer --- Frontend \& Backlog & Co-owned frontend (Admin Portal / Review Hub) \& backlog\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{The v1 success criterion}
+
+The success criterion agreed with the team is deliberately narrow and
+outcome-based: \textbf{one real merchant pilot where at least one AI-generated
+recommendation is actually implemented on the merchant's store and its impact
+measured.} Everything in this report --- the architecture, the review gate, the
+code generation --- exists to make that single outcome achievable and
+repeatable.
+
+\subsection{Source repositories}
+
+Each service lives in its own GitHub repository (assembled as submodules of the
+\texttt{exp-intelligence} monorepo):
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+\textbf{Service} & \textbf{Repository}\\
+\midrule
+Shopify Extractor & \url{https://github.com/aadij1905/shopify-extractor}\\
+Analytics Service & \url{https://github.com/aadij1905/analytics-service}\\
+AI Service & \url{https://github.com/aadij1905/ai-service}\\
+Review Hub & \url{https://github.com/aadij1905/review_hub}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{keybox}{A note on this document vs.\ the handover snapshot}
+Parts of this report draw on the internship \emph{handover} document. The
+\emph{technical} sections here reflect the \textbf{current codebase}: all four
+backlog epics --- including E-004 code generation --- are complete and in MVP
+scope, and suggestion generation supports \emph{multiple} LLM providers with a
+generate$\rightarrow$judge orchestration rather than a single fixed model.
+Where the handover and the code differ in incidental detail (service ports, the
+``Admin Portal''\,/\,``Review Hub'' name, the default model), this report
+follows the code.
+\end{keybox}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Why --- The Problem \& Motivation}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{The two-buyer problem}
+
+The engagement was framed around a \textbf{two-buyer problem} that shaped most
+product decisions:
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{The Growth Lead / marketer} feels the conversion (CRO) pain
+  daily but has \emph{no access to the store's codebase} to act on it.
+  \item \textbf{The Developer} controls the codebase and can make changes, but
+  has \emph{no visibility} into analytics or CRO priorities.
+\end{itemize}
+
+Neither can close the loop alone. This is why the product deliberately runs two
+tracks --- an insight/prioritization/business-impact experience for the Growth
+Lead (the PO view), and an implementation-ready experience with code patches
+for the Developer --- and why a human approval step sits between them. The
+sections below expand the underlying analytics and engineering rationale.
+
+\subsection{The problem}
+
+Shopify merchants have access to an enormous amount of analytics --- sessions,
+conversion rates, bounce rates, traffic sources, device breakdowns, checkout
+funnels, Core Web Vitals --- but this data is:
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Descriptive, not prescriptive.} A dashboard tells you the
+  product page bounce rate is 71\%. It does not tell you \emph{why}, whether
+  that is statistically meaningful given the traffic, or \emph{what to change
+  in the code} to fix it.
+  \item \textbf{Disconnected from implementation.} Even when a merchant knows
+  \emph{what} is wrong, translating ``improve the product page CTA'' into an
+  actual edit in a Liquid theme file is a developer task that rarely happens.
+  \item \textbf{Noisy.} A wild-looking metric over six sessions is almost
+  certainly noise, yet naive tools flag it anyway, eroding trust.
+\end{itemize}
+
+\subsection{The insight}
+
+The gap is not \emph{more measurement} --- it is the translation layer between
+\emph{measurement} and \emph{implementation}. Three capabilities, chained
+together, close that gap:
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Statistical rigor} to separate real problems from sampling
+  noise (a one-sample $z$-test on proportions, not raw multipliers).
+  \item \textbf{Multimodal reasoning} --- combining the \emph{numbers}
+  (ShopifyQL) with what a page \emph{looks like} (crawler screenshots analyzed
+  by a vision model) --- because many conversion problems (a CTA below the
+  fold, missing social proof) are invisible in metrics alone.
+  \item \textbf{Code generation grounded in the store's own theme}, so a
+  suggestion arrives as a real patch against the real installed theme, not
+  generic advice.
+\end{enumerate}
+
+\subsection{Why a human-in-the-loop design}
+
+Every suggestion passes through a Product Owner before a developer sees it.
+This is deliberate: LLM output is probabilistic, and shipping automated code
+changes to a live storefront without review is unacceptable risk. The PO layer
+turns the AI from an ``autonomous agent'' into a \emph{trusted assistant} ---
+the AI proposes, a human disposes, and only then does a developer implement.
+The roadmap (Section~\ref{sec:future}) describes how this gate is preserved
+even as the system moves toward auto-applying patches.
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{How --- System Architecture}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{Architecture at a glance}
+
+\begin{figure}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  svc/.style={rectangle, rounded corners=3pt, draw=brandblue, line width=1pt,
+    fill=lightgray, text width=3.1cm, align=center, minimum height=1.9cm},
+  store/.style={cylinder, shape border rotate=90, aspect=0.28, draw=brandteal,
+    line width=1pt, fill=white, text width=1.9cm, align=center, minimum height=1.6cm},
+  aux/.style={rectangle, rounded corners=2pt, draw=rulegray, dashed, line width=0.8pt,
+    fill=white, text width=3.0cm, align=center, font=\footnotesize},
+  persona/.style={rectangle, rounded corners=2pt, draw=accent, line width=1pt,
+    fill=white, text width=2.4cm, align=center, font=\footnotesize, minimum height=1cm},
+  flow/.style={-{Latex[length=2.6mm]}, line width=1pt, brandblue},
+  auxflow/.style={-{Latex[length=2.2mm]}, dashed, line width=0.8pt, gray},
+  lbl/.style={midway, above, font=\footnotesize\itshape, text=black},
+]
+
+\node[store] (store) {\textbf{Shopify}\\ \textbf{Store}};
+\node[svc, right=1.3cm of store] (ext) {\textbf{Shopify Extractor}\\[2pt] {\scriptsize shopify-pp \textbullet\ :3000}\\[2pt] {\scriptsize OAuth \textbullet\ ShopifyQL \textbullet\ theme code}};
+\node[svc, right=1.3cm of ext] (an) {\textbf{Analytics Service}\\[2pt] {\scriptsize :4000}\\[2pt] {\scriptsize normalize \textbullet\ crawler \textbullet\ detectors}};
+\node[svc, right=1.3cm of an] (ai) {\textbf{AI Service}\\[2pt] {\scriptsize :5001}\\[2pt] {\scriptsize suggestions \textbullet\ code patches}};
+\node[svc, right=1.3cm of ai] (hub) {\textbf{Review Hub}\\[2pt] {\scriptsize :5173}\\[2pt] {\scriptsize React dashboard}};
+
+\node[aux, below=1.0cm of an] (crawl) {Playwright crawler\\ desktop + mobile screenshots};
+\node[aux, below=1.0cm of ai] (llm) {LLM providers\\ Groq \textbullet\ Gemini \textbullet\ Mistral \textbullet\ Cerebras};
+\node[persona] (po) at ([yshift=0.75cm]$(hub.east)+(2.2cm,0)$) {Product Owner\\ approve / reject};
+\node[persona] (dev) at ([yshift=-0.75cm]$(hub.east)+(2.2cm,0)$) {Developer\\ code patch};
+
+\draw[flow] (store) -- (ext) node[lbl]{extract};
+\draw[flow] (ext) -- (an) node[lbl]{ingest};
+\draw[flow] (an) -- (ai) node[lbl]{data + flags};
+\draw[flow] (ai) -- (hub) node[lbl]{report};
+\draw[flow] (hub.east) -- (po.west);
+\draw[flow] (hub.east) -- (dev.west);
+
+\draw[auxflow] (crawl) -- (an);
+\draw[auxflow] (llm) -- (ai);
+\draw[auxflow] (ai.north) to[out=90, in=90, looseness=1.45]
+  node[pos=0.5, above, font=\scriptsize\itshape, text=gray, yshift=1pt]{theme code (/code/generate)}
+  (ext.north);
+
+\end{tikzpicture}%
+}
+\caption{The Exp Intelligence pipeline. Solid arrows are the one-directional
+data flow; dashed arrows are supporting dependencies (the crawler and LLM
+providers) and the on-demand theme-code fetch used when generating a patch.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{End-to-end data flow}
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Install \& extract} (\texttt{shopify-pp}). A merchant installs
+  the embedded app on their store via Shopify OAuth. The extractor runs 10
+  ShopifyQL queries (overview, sales, per-page, traffic sources, devices,
+  funnel, checkout conversion, and three Core Web Vitals: LCP, CLS, INP) and
+  can also pull the \emph{real theme code} that renders any given page.
+  \item \textbf{Ingest \& normalize} (\texttt{analytic service}). Raw query
+  rows are normalized into a uniform shape, then a headless Playwright crawler
+  visits the storefront, takes desktop + mobile screenshots, and enriches page
+  records (e.g.\ ``is the CTA above the fold?'', ``is there social proof?'').
+  \item \textbf{Detect} (\texttt{analytic service}). Deterministic detectors
+  run a $z$-test against the site baseline and emit ranked, severity-scored
+  flags (high-bounce page, low-conversion page, poor traffic source, cart
+  abandonment, funnel drop-off, revenue decline, poor Core Web Vitals, CTA
+  below fold).
+  \item \textbf{Generate} (\texttt{ai service}). The AI service pulls the
+  normalized data + flags, and --- if screenshots exist --- feeds them to a
+  vision model in one integrated pass. LLMs draft suggestions; a deterministic
+  validator grounds every cited number; a revenue forecaster attaches a
+  data-derived impact estimate.
+  \item \textbf{Review} (\texttt{review-hub}). The PO sees suggestions
+  \emph{without} code (problem, plain-English recommendation, effort, impact,
+  confidence) and approves or rejects. Developers see only approved
+  suggestions, each with a ready-to-paste code patch generated on demand
+  against the store's real theme.
+\end{enumerate}
+
+\subsection{Service 1 --- Shopify Extractor (\texttt{shopify-pp})}
+
+\textbf{Stack:} Node.js + Express, \texttt{better-sqlite3} for persistence.
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{OAuth \& security.} Implements the full Shopify OAuth handshake
+  with HMAC verification on both the install redirect and webhooks (raw-body
+  HMAC, mounted before \texttt{express.json()} so signatures verify against the
+  exact bytes). Access tokens are encrypted at rest in SQLite using a 32-byte
+  \texttt{ENCRYPTION\_KEY}.
+  \item \textbf{Compliance.} Handles Shopify's mandatory GDPR webhooks
+  (\texttt{customers/data\_request}, \texttt{customers/redact},
+  \texttt{shop/redact}). The app stores no customer PII --- only shop domain +
+  access token --- so redaction simply deletes the shop record.
+  \item \textbf{ShopifyQL extraction.} A single \texttt{SESSION\_FILTER}
+  constant guarantees every query (\texttt{overview}, \texttt{pages},
+  \texttt{traffic}, \texttt{devices}, \texttt{funnel}, \texttt{checkout})
+  counts the \emph{same} session universe, so the cards never disagree.
+  \item \textbf{Theme code extraction.} \texttt{/api/debug/theme-code} returns
+  the actual Liquid files that render a given page --- the raw material the AI
+  service uses to write store-specific patches.
+\end{itemize}
+
+\subsection{Service 2 --- Analytics Service (\texttt{analytic service})}
+
+\textbf{Stack:} Node.js + Express, Playwright (Chromium), optional AWS S3 for
+screenshot storage.
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Normalization.} Converts raw ShopifyQL rows into a stable
+  internal shape; Core Web Vitals are bucketed against Google's own thresholds
+  (LCP good $\le 2500$ms, CLS good $\le 0.1$, INP good $\le 200$ms).
+  \item \textbf{Crawler.} A reusable headless Chromium session visits each
+  significant page at desktop (1280$\times$800) and mobile (390$\times$844)
+  viewports. It detects the add-to-cart CTA using known theme selectors
+  \emph{plus} a theme-agnostic text heuristic (``add to cart / buy now / \dots''),
+  measures whether it is above the fold, and detects social-proof widgets.
+  \item \textbf{Statistical detectors.} The heart of the noise-rejection
+  strategy. See the callout below.
+\end{itemize}
+
+\begin{keybox}{Why a $z$-test instead of a raw multiplier}
+A page bouncing at 2$\times$ the site average over 6 sessions is probably
+noise; the same rate over 6{,}000 sessions is a real signal. A fixed
+``minimum sessions'' floor cannot tell these apart across store sizes. The
+one-sample $z$-test for a proportion measures how many standard errors an
+observed rate sits from the baseline:
+\[
+z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}}
+\]
+A flag only fires when \emph{both} the effect size (e.g.\ bounce $>1.3\times$
+average) \emph{and} significance ($|z| \ge 1.645$, $\approx$95\% confidence)
+hold. Flags on the same page are annotated as co-occurring so the AI treats
+them as one causal story, not $N$ independent findings.
+\end{keybox}
+
+\subsection{Service 3 --- AI Service (\texttt{ai service})}
+
+\textbf{Stack:} Node.js + Express, multi-provider LLM layer (Groq, Gemini,
+Mistral, Cerebras, Ollama).
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Provider-agnostic core.} A single \texttt{llm.js} entry point
+  resolves the provider from the \texttt{AI\_PROVIDER} env var and lazily loads
+  only the SDK actually selected, so a missing optional dependency never breaks
+  the service. All clients share a uniform \texttt{\{ content, meta \}} shape.
+  \item \textbf{Generate$\rightarrow$Judge orchestration.} When
+  \texttt{AI\_PROVIDER=orchestrate}, several generator models draft candidates
+  in parallel; candidates are deduplicated by fingerprint
+  (\texttt{category::page}, tracking cross-model agreement); a judge model
+  merges, filters, and re-ranks them. Any generator that is rate-limited is
+  simply skipped (\texttt{Promise.allSettled}); if the judge fails, the deduped
+  candidates are returned so a report always comes back.
+  \item \textbf{Vision-integrated path.} When the crawler produced
+  screenshots, a vision model (Gemini) reasons over the images directly in the
+  same pass that writes suggestions --- a visual-flaw pre-pass also injects
+  \texttt{dataQuality:"visual"} flags so UI problems become first-class inputs
+  alongside the numbers.
+  \item \textbf{Deterministic guardrails.} Every raw LLM item passes through
+  \texttt{validateItems}: enums and page paths are repaired, cited numbers are
+  grounded against the real data (ungrounded claims downgraded or dropped when
+  \texttt{GROUNDING\_STRICT=true}), and duplicates are folded.
+  \texttt{forecastImpact} then attaches a \emph{deterministic}, data-derived
+  revenue estimate --- never the LLM's own guess.
+  \item \textbf{On-demand code generation.} \texttt{/code/generate} pulls the
+  real theme files for the affected page from \texttt{shopify-pp}, caps total
+  theme content at 150K chars (OOM defense), and asks a code-strong model
+  (Gemini by default) for a \emph{surgical} patch: only the changed lines, plus
+  verbatim anchor text so a developer --- or a script --- can locate the exact
+  insertion point.
+\end{itemize}
+
+\subsection{Service 4 --- Review Hub (\texttt{review-hub})}
+
+\textbf{Stack:} React + Vite, Recharts, \texttt{localStorage} persistence.
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Two personas.} PO/admin sees the full dashboard and the
+  approve/reject controls; developers see only approved suggestions \emph{with}
+  their code patches.
+  \item \textbf{Resilient by design.} If the backend services are down, the
+  dashboard falls back to an embedded demo dataset, so it is always demoable.
+  The active data source (\texttt{ai} / \texttt{mock} / \texttt{demo}) is shown
+  in the header.
+  \item \textbf{Zero-backend state.} Review status persists in
+  \texttt{localStorage}; the app talks directly to the Analytics and AI
+  services from the browser.
+\end{itemize}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Product Management \& Delivery}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Beyond the engineering, the project was run as a structured product engagement
+--- the artifacts below are as much a part of the deliverable as the code.
+
+\subsection{Agile backlog}
+
+The backlog is a three-tier Agile hierarchy (\textbf{Epics $\rightarrow$
+Features $\rightarrow$ User Stories}), using \textbf{MoSCoW} prioritization and
+\textbf{Given--When--Then} (GWT) acceptance criteria throughout. It is
+structured across four epics:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l Y l l@{}}
+\toprule
+\textbf{Epic} & \textbf{Description} & \textbf{Status} & \textbf{Scope}\\
+\midrule
+E-001 & Data ingestion \& normalization & Complete & MVP (v1)\\
+E-002 & Analytics Service REST API (Node/Express) & Complete & MVP (v1)\\
+E-003 & AI Suggestion Service --- LLM recommendation generation & Complete & MVP (v1)\\
+E-004 & Code generation / developer-facing patch output & Complete & MVP (v1)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+All four epics are complete and in MVP scope. E-004 (developer-facing code
+generation) is realized as the AI service's \texttt{/code/generate} endpoint,
+which fetches the real theme code for the affected page from the extractor and
+generates a surgical, ready-to-paste patch.
+
+\subsection{Key product decisions (and their rationale)}
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Two LLM roles, deliberately split.} Fast, real-time
+  \emph{suggestion} generation vs.\ slower, code-strong \emph{patch}
+  generation are different jobs and use different models --- this split should
+  not be collapsed into ``just use one model''. (Handover pinned Groq
+  Llama\,3.3\,70B for suggestions and Gemini for code; the current code
+  generalizes suggestions to a provider-agnostic layer with optional
+  multi-model orchestration, and keeps Gemini as the default code model.)
+  \item \textbf{Confidence capping over fabrication.} Some Shopify metrics
+  (bounce rate, cart-abandonment rate, average load time) can return
+  \texttt{null}. Rather than estimate or fabricate a value, the system
+  \emph{caps} the confidence of any recommendation touching those metrics. This
+  is a principled choice to avoid hallucinated numbers --- framed to merchants
+  as a \emph{managed limitation}, not an unresolved gap.
+  \item \textbf{Detectors skip silently when data is missing.} The optional
+  detectors (\texttt{cta\_below\_fold}, \texttt{poor\_quality\_traffic\_source})
+  depend on crawler data that only exists when a website URL is supplied. With
+  no URL they skip rather than guess --- no hallucinated output when the
+  underlying data is absent.
+  \item \textbf{Approval as the hand-off trigger.} A PO approving a
+  recommendation is precisely what promotes it into the developer view as
+  implementation-ready --- the mechanism that keeps a human between the AI and
+  the storefront.
+  \item \textbf{Mock data is always labelled.} Demo/unsynced accounts see mock
+  data clearly marked as test-store data, so it is never confusable with a real
+  merchant's live analytics.
+\end{itemize}
+
+\subsection{Competitive \& discovery context}
+
+Product discovery benchmarked the engine against experience-analytics and CRO
+tools (\emph{Contentsquare}, \emph{VWO}, \emph{AICRO.io}), AI coding assistants
+(\emph{Cursor}) as a reference for the code-generation experience, and
+comparable consultancy players (\emph{Accenture}, \emph{Infosys}, \emph{EPAM},
+\emph{Thoughtworks}). The differentiator that emerged: not another analytics
+dashboard, but the \emph{translation layer} from measurement to a reviewed,
+implementable code change.
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{How to Connect All Services}\label{sec:connect}
+% ═════════════════════════════════════════════════════════════════════════════
+
+The services are wired together entirely through URLs in environment variables
+and one frontend config file. Getting these right is the whole integration.
+
+\subsection{The wiring map}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Consumer} & \textbf{Setting} & \textbf{Points at}\\
+\midrule
+\texttt{shopify-pp} & \texttt{ANALYTICS\_SERVICE\_URL} (env) & Analytics \texttt{/api/analytics/ingest}\\
+\texttt{ai service} & \texttt{ANALYTICS\_SERVICE\_URL} (env) & Analytics base URL\\
+\texttt{ai service} & \texttt{SHOPIFY\_APP\_URL} (env) & Extractor base URL (for theme code)\\
+\texttt{review-hub} & \texttt{ANALYTICS\_URL} (config.js) & Analytics base URL\\
+\texttt{review-hub} & \texttt{AI\_URL} (config.js) & AI service base URL\\
+\texttt{review-hub} & \texttt{SHOPIFY\_APP\_URL} (config.js) & Extractor base URL\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Local development}
+
+Install dependencies once per service, then start each in its own terminal in
+dependency order (Analytics first, since AI depends on it):
+
+\begin{lstlisting}[language=bash]
+# 1. Analytics Service  -> http://localhost:4000  (no env vars needed)
+cd "analytic service" && npm install && npm start
+
+# 2. AI Service         -> http://localhost:5001
+cd "ai service" && npm install
+cp .env.example .env      # add GROQ / MISTRAL / CEREBRAS / GEMINI keys
+npm start
+
+# 3. Shopify Extractor  -> http://localhost:3000
+cd shopify-pp && npm install
+cp .env.example .env      # add Shopify client id/secret, ENCRYPTION_KEY
+npm start
+
+# 4. Review Hub         -> http://localhost:5173
+cd review-hub && npm install && npm run dev
+\end{lstlisting}
+
+\subsection{Exposing local services with Cloudflare quick tunnels}
+
+Because the Review Hub runs in the \emph{browser}, it cannot reach a
+teammate's \texttt{localhost}. A Cloudflare quick tunnel mints a public HTTPS
+URL for a local port with no account or deploy required --- useful to dodge
+free-tier rate limits on hosted LLM backends:
+
+\begin{lstlisting}[language=bash]
+brew install cloudflared
+cloudflared tunnel --url http://localhost:4000   # -> Analytics tunnel URL
+cloudflared tunnel --url http://localhost:5001   # -> AI tunnel URL
+\end{lstlisting}
+
+Paste the printed \texttt{*.trycloudflare.com} URLs into
+\texttt{review-hub/src/lib/config.js} (\texttt{ANALYTICS\_URL}, \texttt{AI\_URL})
+and \texttt{ai service/.env} (\texttt{ANALYTICS\_SERVICE\_URL}).
+
+\begin{keybox}{Two gotchas that cost real debugging time}
+\textbf{(1) Tunnel URLs are single-use} --- each restart mints a brand-new
+random URL; you must re-paste it everywhere. \textbf{(2)} \texttt{dotenv} only
+reads \texttt{.env} once at startup, so \textbf{restart the AI service after
+editing its \texttt{.env}}. Vite's dev server, by contrast, hot-reloads
+\texttt{config.js} on save.
+\end{keybox}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Deployment --- Vercel, Railway, Cloudflare \& More}\label{sec:deploy}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Each service has different runtime needs, so no single platform is optimal for
+all four. The table below maps each service to its best-fit host and why.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Service} & \textbf{Recommended host} & \textbf{Why}\\
+\midrule
+Review Hub & \textbf{Vercel} / Cloudflare Pages & Static Vite build; global CDN; zero server\\
+Shopify Extractor & \textbf{Railway} / Fly.io & Long-lived Node process + persistent SQLite volume + webhooks\\
+Analytics Service & \textbf{Railway} / Fly.io (Docker) & Needs Playwright/Chromium; ships its own Dockerfile\\
+AI Service & \textbf{Railway} / Fly.io & Long-lived Node process; outbound LLM calls; env secrets\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Review Hub on Vercel (or Cloudflare Pages)}
+
+The Review Hub is a pure static build --- ideal for a CDN host.
+
+\begin{lstlisting}[language=bash]
+# From the review-hub/ directory
+npm install -g vercel
+vercel               # first run links the project
+vercel --prod        # deploys the production build
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Build command:} \texttt{npm run build} \quad
+  \textbf{Output dir:} \texttt{dist}
+  \item Because service URLs currently live in \texttt{src/lib/config.js} (not
+  env vars), point them at your \emph{deployed} Analytics/AI URLs before
+  building. \emph{Recommended improvement:} read them from \texttt{import.meta.env.VITE\_*}
+  so the same build works across environments (see Section~\ref{sec:improve}).
+  \item \textbf{Cloudflare Pages} is an equivalent alternative: connect the
+  repo, set build command \texttt{npm run build}, output \texttt{dist}.
+\end{itemize}
+
+\subsection{Shopify Extractor \& AI Service on Railway}
+
+Railway builds Node apps with Nixpacks automatically and provides persistent
+volumes --- essential for the extractor's SQLite database.
+
+\begin{lstlisting}[language=bash]
+npm install -g @railway/cli
+railway login
+railway init                 # run inside each service folder
+railway up                   # build & deploy
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Start command:} \texttt{npm start} for both.
+  \item \textbf{Extractor env vars:} \texttt{SHOPIFY\_CLIENT\_ID},
+  \texttt{SHOPIFY\_CLIENT\_SECRET}, \texttt{SHOPIFY\_SCOPES}, \texttt{APP\_URL}
+  (the public Railway URL), \texttt{ANALYTICS\_SERVICE\_URL},
+  \texttt{ENCRYPTION\_KEY}, and \texttt{DB\_PATH} pointing at a
+  \textbf{mounted volume} (e.g.\ \texttt{/data/shops.db}) --- otherwise every
+  redeploy wipes installed shops.
+  \item \textbf{AI env vars:} the provider API keys, \texttt{AI\_PROVIDER},
+  \texttt{ANALYTICS\_SERVICE\_URL}, \texttt{SHOPIFY\_APP\_URL}.
+  \item \textbf{Update the Shopify app config:} \texttt{shopify.app.toml}'s
+  \texttt{application\_url} and \texttt{redirect\_urls} must match the deployed
+  extractor URL.
+\end{itemize}
+
+\subsection{Analytics Service via Docker (Railway / Fly.io / any container host)}
+
+The Analytics Service needs Chromium, so it ships a Dockerfile built on the
+official Playwright image:
+
+\begin{lstlisting}[language=bash]
+FROM mcr.microsoft.com/playwright:v1.61.1-jammy
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY . .
+CMD ["node", "index.js"]
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+# Railway auto-detects the Dockerfile; or on Fly.io:
+fly launch --dockerfile Dockerfile
+fly deploy
+\end{lstlisting}
+
+\begin{itemize}[leftmargin=1.4em]
+  \item Optionally set \texttt{AWS} S3 credentials so screenshots persist in
+  object storage instead of the container's ephemeral filesystem.
+  \item Ensure the host allocates enough memory --- Chromium is memory-hungry;
+  Railway's smallest tier can OOM on image-heavy crawls.
+\end{itemize}
+
+\subsection{Cloudflare's role}
+
+Cloudflare serves two distinct purposes here, which are easy to confuse:
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Quick tunnels} (\texttt{cloudflared tunnel --url}) --- an
+  ephemeral dev bridge from a public URL to a local port
+  (Section~\ref{sec:connect}). Not for production.
+  \item \textbf{Cloudflare Pages} --- a production static host for the Review
+  Hub, equivalent to Vercel.
+\end{enumerate}
+
+Note that \textbf{Playwright-based crawling and long-lived Express servers
+cannot run on Cloudflare Workers} (no full Node/Chromium runtime), which is why
+the backend services target Railway/Fly rather than Cloudflare's edge.
+
+\subsection{Deployment checklist}
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item Deploy Analytics (Docker) $\rightarrow$ note its URL.
+  \item Deploy AI Service with \texttt{ANALYTICS\_SERVICE\_URL} set $\rightarrow$ note its URL.
+  \item Deploy Extractor with \texttt{ANALYTICS\_SERVICE\_URL} + \texttt{APP\_URL} + persistent \texttt{DB\_PATH}.
+  \item Update \texttt{shopify.app.toml} URLs to the deployed extractor.
+  \item Build \& deploy Review Hub with all three URLs configured.
+  \item Smoke-test the pipeline using \texttt{TESTING.md}'s end-to-end order.
+\end{enumerate}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{How Can We Improve It}\label{sec:improve}
+% ═════════════════════════════════════════════════════════════════════════════
+
+The current system is a strong, demoable prototype. The improvements below are
+grouped by theme and roughly ordered by leverage.
+
+\subsection{Persistence \& state}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Replace in-memory caches with a real datastore.} Both the
+  Analytics cache and the AI service's report/suggestion state are in-memory
+  objects --- a restart wipes everything. Move to Postgres or Redis so reports,
+  review decisions, and suggestion status survive redeploys and scale beyond
+  one process.
+  \item \textbf{Move review state off \texttt{localStorage}.} The Review Hub's
+  approve/reject decisions live only in the browser; they should live server-side
+  so decisions are shared across users and devices and auditable.
+\end{itemize}
+
+\subsection{Configuration \& security}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Environment-driven frontend config.} Hard-coded URLs in
+  \texttt{config.js} require a rebuild per environment; switch to
+  \texttt{VITE\_*} env vars so one artifact deploys everywhere.
+  \item \textbf{Real authentication.} The Review Hub uses hard-coded users.
+  Replace with proper auth (Shopify session tokens, or an SSO provider) and
+  role-based access control.
+  \item \textbf{Lock down CORS.} Services currently allow all origins; scope
+  them to known frontends in production.
+\end{itemize}
+
+\subsection{Reliability \& observability}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Async job queue for crawling \& generation.} Crawls and LLM
+  calls are slow and rate-limited; a queue (BullMQ / a managed queue) with
+  retries and backpressure beats fire-and-forget async.
+  \item \textbf{Structured logging, metrics, and tracing.} Today's insight is
+  \texttt{console.log}; add request tracing across the four services so a
+  failed report can be diagnosed end-to-end.
+  \item \textbf{Cost \& quota telemetry.} Token usage is already tracked in
+  \texttt{meta}; surface it as a dashboard so provider costs and rate-limit
+  headroom are visible before they cause 503s.
+\end{itemize}
+
+\subsection{AI quality}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Close the feedback loop.} Feed PO approve/reject decisions back
+  as training signal (few-shot examples or fine-tuning) so suggestion quality
+  improves over time per merchant.
+  \item \textbf{Patch verification before it reaches a developer.} Lint or
+  dry-apply the generated patch against the fetched theme files, so a developer
+  never receives a patch whose anchor text no longer matches.
+  \item \textbf{Regression suite for detectors and prompts.} The fixtures
+  directory is a good start; grow it into a golden-dataset test so prompt or
+  threshold changes are measured, not guessed.
+\end{itemize}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Future Scope}\label{sec:future}
+% ═════════════════════════════════════════════════════════════════════════════
+
+\subsection{Immediate next steps (open items)}
+
+With MVP scope complete, the open items are next-phase work rather than
+unfinished MVP tasks. In priority order:
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Run the first merchant pilot.} The single most important next
+  step --- v1 is only validated once one recommendation is implemented on a
+  real store and its impact measured. Everything else is subordinate to this.
+  \item \textbf{Harden code generation from the pilot.} E-004 is implemented;
+  the pilot is what proves the PO-approval$\rightarrow$patch flow on real theme
+  code and surfaces the rough edges.
+  \item \textbf{Add data depth (GA4 and beyond)} to reduce reliance on
+  confidence capping --- the first concrete step toward the universal-connector
+  vision below.
+  \item \textbf{Specify rate limits concretely.} ``Generous limits'' was
+  flagged during backlog review as under-specified; real numbers are needed
+  before any external-facing rollout.
+  \item \textbf{Frame crawler optionality correctly.} When explaining why the
+  two optional detectors need a website URL, frame it as a barrier-to-entry and
+  a time-vs-quality tradeoff for the merchant --- not around token limits.
+\end{enumerate}
+
+\subsection{Vision}
+
+Today the pipeline is Shopify-specific and ends by handing a developer a patch
+to copy-paste. The future vision inverts both limitations:
+
+\begin{keybox}{Where this is going}
+A library of lightweight \textbf{extensions / connectors} pulls \emph{raw data}
+from any analytics platform. That data is turned into ranked suggestions and
+generated code \emph{exactly as today}. But instead of a human copy-pasting the
+patch, the approved change is \textbf{applied to the codebase automatically} ---
+committed, opened as a pull request, and merged --- with no manual step. And it
+is \textbf{no longer limited to Shopify.}
+\end{keybox}
+
+\subsection{Pillar 1 --- Universal connectors (beyond Shopify)}
+
+The extractor becomes one of many pluggable \emph{connectors} behind a common
+interface. Each connector's only job: authenticate to a platform and emit raw
+data in the shape the Analytics Service already expects
+(\texttt{overview}, \texttt{pages}, \texttt{trafficSources}, \texttt{devices},
+\texttt{funnel}, Core Web Vitals). Because the ingest contract is already
+platform-neutral, everything downstream --- detectors, AI, review --- works
+unchanged. Candidate connectors:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+\textbf{Connector} & \textbf{Raw data it would emit}\\
+\midrule
+Google Analytics 4 & Sessions, conversions, funnels, traffic sources, devices\\
+Adobe Analytics & Enterprise session \& funnel data\\
+WooCommerce / Magento / BigCommerce & Non-Shopify e-commerce metrics + theme/template code\\
+Plausible / Matomo & Privacy-first web analytics\\
+Mixpanel / Amplitude & Product-analytics event funnels\\
+Search Console / PageSpeed & SEO \& Core Web Vitals at scale\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The connector interface is deliberately thin: \texttt{authenticate()},
+\texttt{extract()} $\rightarrow$ normalized payload, and optionally
+\texttt{getSourceCode(page)} for platforms where the code is fetchable. A
+connector that cannot supply source code simply skips the auto-apply pillar and
+still produces suggestions.
+
+\subsection{Pillar 2 --- Automatic code application}
+
+The single biggest manual step today is a developer copy-pasting the patch. The
+patch format was \emph{designed} to remove that step: each patch already carries
+verbatim anchor text (``insert after this exact line \dots'') precisely so a
+\emph{script} --- not just a human --- can locate the edit. The roadmap:
+
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{Anchor-based patch applier.} A deterministic engine locates the
+  anchor by exact string match and applies the change, failing loudly if the
+  anchor drifted (never a fuzzy guess on live code).
+  \item \textbf{Git integration.} For code-backed platforms, the applier
+  commits to a branch and opens a \textbf{pull request} --- the PO's ``approve''
+  becomes the trigger, and the human review gate moves to standard PR review.
+  \item \textbf{Shopify theme write-back.} Using the Shopify Theme API, apply
+  the change to a \emph{duplicated draft theme} first, screenshot the result,
+  and only publish after approval.
+  \item \textbf{Verify-before-merge.} Re-run the crawler on the changed page
+  and confirm the flagged problem is actually resolved before the PR is allowed
+  to merge --- closing the observe$\rightarrow$act$\rightarrow$verify loop
+  automatically.
+\end{enumerate}
+
+\subsection{Pillar 3 --- Continuous optimization}
+
+With connectors pulling data on a schedule and patches applying themselves, the
+system becomes a \emph{continuous} optimization engine rather than a one-shot
+report: detect $\rightarrow$ suggest $\rightarrow$ (PO-approve) $\rightarrow$
+apply $\rightarrow$ measure $\rightarrow$ repeat. A/B testing each applied change
+against a holdout would let the system \emph{prove} lift rather than forecast
+it, and feed real outcomes back into suggestion ranking.
+
+\subsection{Target architecture}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+\textbf{Layer} & \textbf{Evolution}\\
+\midrule
+Connectors & Shopify extractor $\rightarrow$ pluggable connector SDK (GA4, Woo, Adobe, \dots)\\
+Analytics & Unchanged contract; add scheduled/continuous ingestion\\
+AI & Unchanged generation; add feedback-trained ranking\\
+Apply & \emph{New}: anchor-based applier + Git/Theme write-back + verify\\
+Review & PO approval becomes the PR/apply trigger, not a copy-paste handoff\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{keybox}{The through-line}
+Every future pillar reuses the platform-neutral ingest contract and the
+anchor-carrying patch format that already exist. The prototype was, in effect,
+built as the Shopify \emph{instance} of a general system --- the roadmap is
+mostly about widening the front door (connectors) and automating the last step
+(apply), not rewriting the middle.
+\end{keybox}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ═════════════════════════════════════════════════════════════════════════════
+
+Exp Intelligence demonstrates that the valuable, hard part of storefront
+optimization is not measurement but the \emph{translation from measurement to
+implementation}. By chaining statistical rigor, multimodal (numbers + visual)
+reasoning, and theme-grounded code generation --- all behind a human review
+gate --- it turns a wall of analytics into a short, ranked list of actions with
+the code to ship them. The architecture's platform-neutral ingest contract and
+script-locatable patch format mean the ambitious future --- universal
+connectors and automatic code application beyond Shopify --- is an extension of
+what exists, not a rebuild.
+
+\vfill
+\begin{center}
+{\color{rulegray}\rule{0.5\textwidth}{0.5pt}}\\[0.3cm]
+{\small\itshape End of report}
+\end{center}
+
+\end{document}
